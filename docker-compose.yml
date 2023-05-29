@@ -3,33 +3,38 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: tam-prometheus
-    ports:
-      - 9990:9090
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    # ports:
+    #   - 9990:9090
+    # volumes:
+    #   - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
   grafana:
     image: grafana/grafana:latest
     container_name: tam-grafana
-    ports:
-      - 9992:3000
+    # ports:
+    #   - 9992:3000
     # environment:
     #   - GF_SERVER_DOMAIN=host.docker.internal:9992
     #   - GF_SERVER_ROOT_URL=http://host.docker.internal:9992
-    # volumes:
+   # volumes:
     #   - ./grafana/grafana.ini:/etc/grafana/grafana.ini
   
   keycloak:
+    build:
+      context: ./keycloak
+      dockerfile: Dockerfile.alpine
+    image: jasony62/keycloak-alpine:latest
     container_name: tam-keycloak
-    image: quay.io/keycloak/keycloak:21.1.1 # replaced during build, see in target
+    # image: quay.io/keycloak/keycloak:21.1.1 # replaced during build, see in target
     # ./bin/kc.sh build => build and deploy custom themes, providers, etc.
     # ./bin/kc.sh start-dev --import-realm => import Apiman realm, if not already imported.
-    entrypoint: ['/bin/bash', '-c']
-    command:
-      - |
-        cd /opt/keycloak
-        ./bin/kc.sh build
-        ./bin/kc.sh start-dev --import-realm --spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true
+    # entrypoint: ['/bin/bash', '-c']
+    # command:
+    #   - |
+    #     cd /opt/keycloak
+    #     ./bin/kc.sh build
+    #     ./bin/kc.sh start-dev --import-realm --spi-login-protocol-openid-connect-legacy-logout-redirect-uri=true
+    command: [start-dev]
     # ports:
     #   - "9085:8080"
     # environment:

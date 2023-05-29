@@ -36,6 +36,18 @@ htpasswd -nb admin 12345678 > /etc/nginx/admin.pwd
 
 用 keycloak 给 grafana 提供用户认证服务
 
+```
+curl -L https://github.com/keycloak/keycloak/releases/download/21.1.1/keycloak-21.1.1.tar.gz -o ~/keycloak-21.1.1.tar.gz
+```
+
+```
+docker build -f Dockerfile.alpine -t jasony62/keycloak-alpine .
+```
+
+```
+docker run -it --rm -p 6666:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin123! -e KC_HOSTNAME_URL=http://host.docker.internal:6666 jasony62/keycloak-alpine start-dev
+```
+
 # 参考
 
 tms-efk

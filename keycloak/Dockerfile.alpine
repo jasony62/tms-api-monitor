@@ -1,0 +1,33 @@
+FROM alpine:3.17
+
+# refresh
+RUN apk update && apk upgrade
+
+# create a user keycloak will run as
+# RUN adduser keycloak -D
+
+# need curl to download keycloak
+# Java is required by keycloak (todo: check if JRE is enough, may save space)
+RUN apk add openjdk17
+
+# USER keycloak
+
+RUN mkdir -p /home/keycloak
+
+COPY ./keycloak-21.1.1.tar.gz /home/keycloak/keycloak.tar.gz
+
+RUN cd /home/keycloak && tar -xzf keycloak.tar.gz --strip-components=1
+RUN rm home/keycloak/keycloak.tar.gz
+
+COPY ./kc.sh /home/keycloak/bin/kc.sh
+
+EXPOSE 8080
+EXPOSE 8443
+
+# USER keycloak
+
+WORKDIR /home/keycloak
+
+# RUN apk add curl
+
+ENTRYPOINT ["/home/keycloak/bin/kc.sh"]
